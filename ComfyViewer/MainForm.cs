@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace FapViewer
+namespace ComfyViewer
 {
 	/// <summary>
 	/// Designer content
@@ -28,7 +28,7 @@ namespace FapViewer
 			this.BT_CLOSE = new System.Windows.Forms.Button();
 			this.BT_DEL = new System.Windows.Forms.Button();
 			this.BT_SIZER = new System.Windows.Forms.Button();
-			this.PB_IMG = new FapViewer.PictureBoxWithInterpolationMode();
+			this.PB_IMG = new ComfyViewer.PictureBoxWithInterpolationMode();
 			((System.ComponentModel.ISupportInitialize)(this.PB_IMG)).BeginInit();
 			this.SuspendLayout();
 			//
@@ -162,6 +162,7 @@ namespace FapViewer
 
 		public MainForm(string[] args)
 		{
+			
 			InitializeComponent();
 
 			guiControls.Add(BT_CLOSE);
@@ -177,7 +178,7 @@ namespace FapViewer
 
 			int i = 0;
 			var validExtensions = new[] { "JPG", "JPEG", "BMP", "GIF", "PNG" };
-			foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(@"\"))))
+			foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.PathSeparator))))
 			{
 				string normalizedPath = filepath.ToUpper();
 				if (validExtensions.Any(normalizedPath.EndsWith))
@@ -458,7 +459,7 @@ namespace FapViewer
 		{
 			System.Diagnostics.Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
 
-			foreach (System.Diagnostics.Process process in System.Diagnostics.Process.GetProcessesByName("FapViewer"))
+			foreach (System.Diagnostics.Process process in System.Diagnostics.Process.GetProcessesByName("ComfyViewer"))
 				if (currentProcess.Id != process.Id)
 					process.Kill();
 

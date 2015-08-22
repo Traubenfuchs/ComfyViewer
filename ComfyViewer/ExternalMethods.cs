@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-namespace FapViewer
+namespace ComfyViewer
 {
 	public static class ExternalMethods
 	{

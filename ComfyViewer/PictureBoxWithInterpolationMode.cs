@@ -1,4 +1,4 @@
-﻿namespace FapViewer
+﻿namespace ComfyViewer
 {
 	public class PictureBoxWithInterpolationMode : System.Windows.Forms.PictureBox
 	{
