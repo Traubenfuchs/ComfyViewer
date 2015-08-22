@@ -1,5 +1,5 @@
 # ComfyViewer
-Comfortable image viewer
+Comfortable image viewer - pull images on the .exe or register it as default image viewer.
 
 - borderless for maximum amount of concurrently viewable images
 - limitless resizing
