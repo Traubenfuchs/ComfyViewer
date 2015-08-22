@@ -178,7 +178,7 @@ namespace ComfyViewer
 
 			int i = 0;
 			var validExtensions = new[] { "JPG", "JPEG", "BMP", "GIF", "PNG" };
-			foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.PathSeparator))))
+			foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.DirectorySeparatorChar))))
 			{
 				string normalizedPath = filepath.ToUpper();
 				if (validExtensions.Any(normalizedPath.EndsWith))
