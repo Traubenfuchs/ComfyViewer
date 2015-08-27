@@ -8,6 +8,7 @@ Comfortable image viewer - pull images on the .exe or register it as default ima
 - plays .gif files (hey, that makes it at least better than Microsofts image viewers!)
 - application icon is the currently viewed image
 
+Don't worry, the buttons become invisible. Leaving nothing besides the image itself.
 ![alt text](https://github.com/Traubenfuchs/ComfyViewer/blob/master/img/example1.png "Logo Title Text 1")
 
 ## Manual
