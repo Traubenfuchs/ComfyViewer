@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+
 namespace ComfyViewer
 {
 	public static class ExternalMethods
@@ -8,9 +9,11 @@ namespace ComfyViewer
 
 		[System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
 		public static extern bool ReleaseCapture();
+
 		[System.Runtime.InteropServices.DllImport("kernel32.dll")]
 		[return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
 		public static extern bool SetProcessWorkingSetSize(System.IntPtr process, System.UIntPtr minimumWorkingSetSize, System.UIntPtr maximumWorkingSetSize);
+
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
 		[return: System.Runtime.InteropServices.MarshalAs(UnmanagedType.Bool)]
 		public static extern bool SetWindowPos(System.IntPtr hWnd, System.IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);

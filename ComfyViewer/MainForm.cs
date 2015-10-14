@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ComfyViewer
@@ -12,11 +13,11 @@ namespace ComfyViewer
 	/// </summary>
 	public partial class MainForm : System.Windows.Forms.Form
 	{
-		public System.Windows.Forms.Button BT_L;
-		public System.Windows.Forms.Button BT_R;
-		public System.Windows.Forms.Button BT_KILLALL;
 		public System.Windows.Forms.Button BT_CLOSE;
 		public System.Windows.Forms.Button BT_DEL;
+		public System.Windows.Forms.Button BT_KILLALL;
+		public System.Windows.Forms.Button BT_L;
+		public System.Windows.Forms.Button BT_R;
 		public System.Windows.Forms.Button BT_SIZER;
 		public PictureBoxWithInterpolationMode PB_IMG;
 
@@ -31,33 +32,33 @@ namespace ComfyViewer
 			this.PB_IMG = new ComfyViewer.PictureBoxWithInterpolationMode();
 			((System.ComponentModel.ISupportInitialize)(this.PB_IMG)).BeginInit();
 			this.SuspendLayout();
-			//
+			// 
 			// BT_L
-			//
+			// 
 			this.BT_L.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_L.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_L.Location = new System.Drawing.Point(12, 521);
 			this.BT_L.Name = "BT_L";
 			this.BT_L.Size = new System.Drawing.Size(75, 75);
 			this.BT_L.TabIndex = 0;
-			this.BT_L.Text = "L";
+			this.BT_L.Text = "<";
 			this.BT_L.UseVisualStyleBackColor = true;
 			this.BT_L.Click += new System.EventHandler(this.BT_L_Click);
-			//
+			// 
 			// BT_R
-			//
+			// 
 			this.BT_R.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_R.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_R.Location = new System.Drawing.Point(93, 521);
 			this.BT_R.Name = "BT_R";
 			this.BT_R.Size = new System.Drawing.Size(75, 75);
 			this.BT_R.TabIndex = 1;
-			this.BT_R.Text = "R";
+			this.BT_R.Text = ">";
 			this.BT_R.UseVisualStyleBackColor = true;
 			this.BT_R.Click += new System.EventHandler(this.BT_R_Click);
-			//
+			// 
 			// BT_KILLALL
-			//
+			// 
 			this.BT_KILLALL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_KILLALL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_KILLALL.Location = new System.Drawing.Point(255, 521);
@@ -67,9 +68,9 @@ namespace ComfyViewer
 			this.BT_KILLALL.Text = "close all";
 			this.BT_KILLALL.UseVisualStyleBackColor = true;
 			this.BT_KILLALL.Click += new System.EventHandler(this.BT_KILLALL_Click);
-			//
+			// 
 			// BT_CLOSE
-			//
+			// 
 			this.BT_CLOSE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.BT_CLOSE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_CLOSE.Location = new System.Drawing.Point(694, 12);
@@ -79,9 +80,9 @@ namespace ComfyViewer
 			this.BT_CLOSE.Text = "close";
 			this.BT_CLOSE.UseVisualStyleBackColor = true;
 			this.BT_CLOSE.Click += new System.EventHandler(this.BT_CLOSE_Click);
-			//
+			// 
 			// BT_DEL
-			//
+			// 
 			this.BT_DEL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.BT_DEL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_DEL.Location = new System.Drawing.Point(694, 521);
@@ -91,24 +92,24 @@ namespace ComfyViewer
 			this.BT_DEL.Text = "delete";
 			this.BT_DEL.UseVisualStyleBackColor = true;
 			this.BT_DEL.Click += new System.EventHandler(this.BT_DEL_Click);
-			//
+			// 
 			// BT_SIZER
-			//
+			// 
 			this.BT_SIZER.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_SIZER.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_SIZER.Location = new System.Drawing.Point(174, 521);
 			this.BT_SIZER.Name = "BT_SIZER";
 			this.BT_SIZER.Size = new System.Drawing.Size(75, 75);
 			this.BT_SIZER.TabIndex = 5;
-			this.BT_SIZER.Text = "Fit";
+			this.BT_SIZER.Text = "fit";
 			this.BT_SIZER.UseVisualStyleBackColor = true;
 			this.BT_SIZER.Click += new System.EventHandler(this.BT_SIZER_Click);
-			//
+			// 
 			// PB_IMG
-			//
-			this.PB_IMG.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			// 
+			this.PB_IMG.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.PB_IMG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
 			this.PB_IMG.Location = new System.Drawing.Point(0, 0);
 			this.PB_IMG.Margin = new System.Windows.Forms.Padding(0);
@@ -117,9 +118,9 @@ namespace ComfyViewer
 			this.PB_IMG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.PB_IMG.TabIndex = 6;
 			this.PB_IMG.TabStop = false;
-			//
+			// 
 			// MainForm
-			//
+			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(781, 608);
@@ -140,20 +141,19 @@ namespace ComfyViewer
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.PB_IMG)).EndInit();
 			this.ResumeLayout(false);
+
 		}
 	}
 
 	public partial class MainForm : System.Windows.Forms.Form
 	{
 		public const int sizeCursorBoundry = 35;
+		public System.Collections.Generic.List<string> fileList;
 		public double heightRatio = 0;
+		public System.Windows.Forms.Timer invisTimer;
+		public int filePosition = 0;
 		public double widthRatio = 0;
-		public int position = 0;
-		public int lasty = 0;
-		public System.Collections.Generic.List<string> fileList = null;
-		public System.Windows.Forms.Timer invisTimer = new System.Windows.Forms.Timer();
-
-		private List<Control> guiControls = new List<Control>();
+		private List<Control> guiControls;
 
 		public MainForm()
 		{
@@ -162,7 +162,26 @@ namespace ComfyViewer
 
 		public MainForm(string[] args)
 		{
-			
+			//args = new string[] { @"E:\survivor\porn\a.png" };
+			Task t = Task.Run(() =>
+			{
+				fileList = new List<string>();
+				Regex regex = new Regex(@"(jpg|png|gif|jpeg|bmp)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				int i = 0;
+				foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.DirectorySeparatorChar))))
+				{
+					if (regex.IsMatch(filepath))
+					{
+						fileList.Add(filepath);
+						if (filepath == args[0])
+							filePosition = i;
+						i++;
+					}
+				}
+			});
+
+			invisTimer = new System.Windows.Forms.Timer();
+			guiControls = new List<Control>();
 			InitializeComponent();
 
 			guiControls.Add(BT_CLOSE);
@@ -174,22 +193,6 @@ namespace ComfyViewer
 
 			SetVisibilityOfGuiControls(false);
 
-			fileList = new System.Collections.Generic.List<string>();
-
-			int i = 0;
-			var validExtensions = new[] { "JPG", "JPEG", "BMP", "GIF", "PNG" };
-			foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.DirectorySeparatorChar))))
-			{
-				string normalizedPath = filepath.ToUpper();
-				if (validExtensions.Any(normalizedPath.EndsWith))
-				{
-					fileList.Add(filepath);
-					if (filepath.Equals(args[0]))
-						position = i;
-					i++;
-				}
-			}
-
 			invisTimer.Tick += (a, b) =>
 			{
 				SetVisibilityOfGuiControls(false);
@@ -199,7 +202,8 @@ namespace ComfyViewer
 
 			this.PB_IMG.MouseDown += this.Action_LMouseDownAndMove;
 
-			// allows moving outside of screen bounds
+			// allows negative y values (moving the window above the upper screen border)
+			int lasty = 0;
 			this.Move += (a, b) =>
 			{
 				if (this.Location.Y == 0)
@@ -260,28 +264,21 @@ namespace ComfyViewer
 				}
 			};
 
+			iconTimer.Interval = 250;
+			iconTimer.Tick += (a, b) =>
+			{
+				DestroyIcon(this.Icon.Handle);
+				this.Icon = Icon.FromHandle(lastBm.GetHicon());
+				iconTimer.Stop();
+			};
+			iconTimer.Stop();
+			t.Wait();
 			LoadImage(args[0]);
-			//using (Image img = System.Drawing.Image.FromFile(args[0]))
-			//{
-				
-			//	PB_IMG.Image = (Image)img.Clone();d
-			//}
-			this.Text = args[0];
-			this.widthRatio = PB_IMG.Image.Width;
-			this.heightRatio = PB_IMG.Image.Height;
-
-			if ((int)this.heightRatio > 1200)
-			{
-				this.Height = 1200;
-				this.Width = (int)(1200 / (this.heightRatio / this.widthRatio));
-			}
-			else
-			{
-				this.Height = (int)this.heightRatio;
-				this.Width = (int)this.widthRatio;
-			}
-			this.PB_IMG.Focus(); ;
+			this.PB_IMG.Focus();
 		}
+
+		[System.Runtime.InteropServices.DllImport("user32")]
+		public static extern bool DestroyIcon(IntPtr hIcon);
 
 		public void SetVisibilityOfGuiControls(bool x)
 		{
@@ -295,6 +292,12 @@ namespace ComfyViewer
 			if (keyData == Keys.Left) GoLeft();
 			else if (keyData == Keys.Right) GoRight();
 			return true;
+		}
+
+		// I really can't remember what this method is supposed to do
+		protected override void SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified)
+		{
+			ExternalMethods.SetWindowPos(this.Handle, (IntPtr)SpecialWindowHandles.HWND_TOP, x, y, width, height, SetWindowPosFlags.SWP_SHOWWINDOW);
 		}
 
 		// enforces fixed aspect ratio when resizing
@@ -322,84 +325,6 @@ namespace ComfyViewer
 			base.WndProc(ref message);
 		}
 
-		protected override void SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified)
-		{
-			ExternalMethods.SetWindowPos(this.Handle, (IntPtr)SpecialWindowHandles.HWND_TOP, x, y, width, height, SetWindowPosFlags.SWP_SHOWWINDOW);
-		}
-
-		private static long l = 0;
-
-		private void MouseMoveEventToMakeAndKeepGuiControlsVisible(object o, object e)
-		{
-			SetVisibilityOfGuiControls(true);
-			invisTimer.Stop();
-			invisTimer.Start();
-		}
-
-		private void GoLeft()
-		{
-			if (--position < 0)
-				position = fileList.Count - 1;
-
-			Go(GoLeft);
-		}
-
-		private void GoRight()
-		{
-			if (++position > fileList.Count - 1)
-				position = 0;
-			Go(GoRight);
-		}
-
-		[System.Runtime.InteropServices.DllImport("user32")]
-		public static extern bool DestroyIcon(IntPtr hIcon);
-
-		private void LoadImage(string path)
-		{
-			var bytes = File.ReadAllBytes(path);
-			var ms = new MemoryStream(bytes);
-			var img = Image.FromStream(ms);
-			ms = new MemoryStream(bytes);
-			var bm = (Bitmap)Bitmap.FromStream(ms);
-
-			PB_IMG.Image = img;
-
-			DestroyIcon(this.Icon.Handle);
-
-			this.Icon = Icon.FromHandle(bm.GetHicon());
-		}
-
-		private void Go(Action next)
-		{
-			if (System.IO.File.Exists(fileList[position]))
-			{
-				try
-				{
-					LoadImage(fileList[position]);
-				}
-				catch (OutOfMemoryException) // happens on Image.FromFile when used on certain invalid images
-				{
-					Go(next);
-				}
-
-				this.widthRatio = PB_IMG.Image.Width;
-				this.heightRatio = PB_IMG.Image.Height;
-				this.Text = fileList[position];
-				if ((int)this.heightRatio > 1200)
-				{
-					this.Height = 1200;
-					this.Width = (int)(1200 / (this.heightRatio / this.widthRatio));
-				}
-				else
-				{
-					this.Height = (int)this.heightRatio;
-					this.Width = (int)this.widthRatio;
-				}
-			}
-			else
-				Go(next);
-		}
-
 		// move anywhere +
 		// extended resizing
 		private void Action_LMouseDownAndMove(object sender, object e)
@@ -407,11 +332,10 @@ namespace ComfyViewer
 			const int WM_NCLBUTTONDOWN = 0xA1;
 			const int HT_CAPTION = 0x2;
 
-			// moving and resizing
-			//if (e.Button == System.Windows.Forms.MouseButtons.Left)
-			//{
 			System.Drawing.Point mousePosition = this.PointToClient(System.Windows.Forms.Cursor.Position);
-			ExternalMethods.ReleaseCapture();
+			ExternalMethods.ReleaseCapture(); // necessary for moving the window around & resizing
+
+			// the following code sets the cursor
 			if (mousePosition.X < sizeCursorBoundry)
 			{
 				if (mousePosition.Y < sizeCursorBoundry)
@@ -436,10 +360,30 @@ namespace ComfyViewer
 				ExternalMethods.SendMessage(Handle, WM_NCLBUTTONDOWN, 15, 0);
 			else
 				ExternalMethods.SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0); // move the winow
-																					  //}
 		}
 
-		// BT ACTIONS
+		private void BT_CLOSE_Click(object sender, System.EventArgs e)
+		{
+			System.Diagnostics.Process.GetCurrentProcess().Kill();
+		}
+
+		private void BT_DEL_Click(object sender, System.EventArgs e)
+		{
+			GoRight();
+			System.IO.File.Delete(fileList[filePosition]);
+		}
+
+		private void BT_KILLALL_Click(object sender, System.EventArgs e)
+		{
+			System.Diagnostics.Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+
+			foreach (System.Diagnostics.Process process in System.Diagnostics.Process.GetProcessesByName("ComfyViewer"))
+				if (currentProcess.Id != process.Id)
+					process.Kill();
+
+			currentProcess.Kill();
+		}
+
 		private void BT_L_Click(object sender, System.EventArgs e)
 		{
 			GoLeft();
@@ -455,37 +399,91 @@ namespace ComfyViewer
 			this.Size = new Size((int)PB_IMG.Image.Width, (int)PB_IMG.Image.Height);
 		}
 
-		private void BT_KILLALL_Click(object sender, System.EventArgs e)
+		private void Go(Action next)
 		{
-			System.Diagnostics.Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
-
-			foreach (System.Diagnostics.Process process in System.Diagnostics.Process.GetProcessesByName("ComfyViewer"))
-				if (currentProcess.Id != process.Id)
-					process.Kill();
-
-			currentProcess.Kill();
+			if (System.IO.File.Exists(fileList[filePosition]))
+			{
+				try
+				{
+					LoadImage(fileList[filePosition]);
+				}
+				catch (OutOfMemoryException) // happens on Image.FromFile when used on certain invalid images
+				{
+					Go(next);
+				}
+			}
+			else
+				Go(next);
 		}
 
-		private void BT_DEL_Click(object sender, System.EventArgs e)
+		private void GoLeft()
 		{
-			string deletee = fileList[position];
-			//PB_IMG.Image.Dispose();
-			GoRight();
-			System.IO.File.Delete(deletee);
+			if (--filePosition < 0)
+				filePosition = fileList.Count - 1;
+
+			Go(GoLeft);
 		}
 
-		private void BT_CLOSE_Click(object sender, System.EventArgs e)
+		private void GoRight()
 		{
-			System.Diagnostics.Process.GetCurrentProcess().Kill();
+			if (++filePosition > fileList.Count - 1)
+				filePosition = 0;
+			Go(GoRight);
+		}
+
+		private MemoryStream lastMemoryStream = null;
+		private Bitmap lastBm = null;
+		private System.Windows.Forms.Timer iconTimer = new System.Windows.Forms.Timer();
+
+		private void LoadImage(string path)
+		{
+			if (lastMemoryStream != null)
+				lastMemoryStream.Close();
+			lastMemoryStream = new MemoryStream(File.ReadAllBytes(path));
+
+			var bm = (Bitmap)Bitmap.FromStream(lastMemoryStream);
+			PB_IMG.Image = bm;
+			lastBm = bm;
+			iconTimer.Stop();
+			iconTimer.Start();
+
+			this.widthRatio = PB_IMG.Image.Width;
+			this.heightRatio = PB_IMG.Image.Height;
+			this.Text = fileList[filePosition];
+			if ((int)this.heightRatio > 1200)
+			{
+				this.Height = 1200;
+				this.Width = (int)(1200 / (this.heightRatio / this.widthRatio));
+			}
+			else
+			{
+				this.Height = (int)this.heightRatio;
+				this.Width = (int)this.widthRatio;
+			}
+		}
+
+		private void MouseMoveEventToMakeAndKeepGuiControlsVisible(object o, object e)
+		{
+			SetVisibilityOfGuiControls(true);
+			invisTimer.Stop();
+			invisTimer.Start();
 		}
 	}
 
 	internal static class Program
 	{
-		[System.STAThread]
+		//[System.STAThread]
 		private static void Main(string[] args)
 		{
 			System.Windows.Forms.Application.Run(new MainForm(args));
 		}
+	}
+
+	public struct RectangleStruct
+	{
+		public int Left;
+		public int Top;
+		public int Right;
+		public int Bottom;
 	}
 }
