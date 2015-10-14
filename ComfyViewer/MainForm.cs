@@ -162,7 +162,7 @@ namespace ComfyViewer
 
 		public MainForm(string[] args)
 		{
-			//args = new string[] { @"E:\survivor\porn\a.png" };
+			//args = new string[] { @"C:\Users\akkir\Desktop\rgb.png" };
 			Task t = Task.Run(() =>
 			{
 				fileList = new List<string>();
@@ -407,7 +407,7 @@ namespace ComfyViewer
 				{
 					LoadImage(fileList[filePosition]);
 				}
-				catch (OutOfMemoryException) // happens on Image.FromFile when used on certain invalid images
+				catch (Exception ex) when (ex is OutOfMemoryException || ex is ArgumentException) // happens on Image.FromFile when used on certain invalid images
 				{
 					Go(next);
 				}
