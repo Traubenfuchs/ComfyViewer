@@ -32,9 +32,9 @@ namespace ComfyViewer
 			this.PB_IMG = new ComfyViewer.PictureBoxWithInterpolationMode();
 			((System.ComponentModel.ISupportInitialize)(this.PB_IMG)).BeginInit();
 			this.SuspendLayout();
-			// 
+			//
 			// BT_L
-			// 
+			//
 			this.BT_L.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_L.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_L.Location = new System.Drawing.Point(12, 521);
@@ -44,9 +44,9 @@ namespace ComfyViewer
 			this.BT_L.Text = "<";
 			this.BT_L.UseVisualStyleBackColor = true;
 			this.BT_L.Click += new System.EventHandler(this.BT_L_Click);
-			// 
+			//
 			// BT_R
-			// 
+			//
 			this.BT_R.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_R.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_R.Location = new System.Drawing.Point(93, 521);
@@ -56,9 +56,9 @@ namespace ComfyViewer
 			this.BT_R.Text = ">";
 			this.BT_R.UseVisualStyleBackColor = true;
 			this.BT_R.Click += new System.EventHandler(this.BT_R_Click);
-			// 
+			//
 			// BT_KILLALL
-			// 
+			//
 			this.BT_KILLALL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_KILLALL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_KILLALL.Location = new System.Drawing.Point(255, 521);
@@ -68,9 +68,9 @@ namespace ComfyViewer
 			this.BT_KILLALL.Text = "close all";
 			this.BT_KILLALL.UseVisualStyleBackColor = true;
 			this.BT_KILLALL.Click += new System.EventHandler(this.BT_KILLALL_Click);
-			// 
+			//
 			// BT_CLOSE
-			// 
+			//
 			this.BT_CLOSE.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.BT_CLOSE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_CLOSE.Location = new System.Drawing.Point(694, 12);
@@ -80,9 +80,9 @@ namespace ComfyViewer
 			this.BT_CLOSE.Text = "close";
 			this.BT_CLOSE.UseVisualStyleBackColor = true;
 			this.BT_CLOSE.Click += new System.EventHandler(this.BT_CLOSE_Click);
-			// 
+			//
 			// BT_DEL
-			// 
+			//
 			this.BT_DEL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.BT_DEL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_DEL.Location = new System.Drawing.Point(694, 521);
@@ -92,9 +92,9 @@ namespace ComfyViewer
 			this.BT_DEL.Text = "delete";
 			this.BT_DEL.UseVisualStyleBackColor = true;
 			this.BT_DEL.Click += new System.EventHandler(this.BT_DEL_Click);
-			// 
+			//
 			// BT_SIZER
-			// 
+			//
 			this.BT_SIZER.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.BT_SIZER.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BT_SIZER.Location = new System.Drawing.Point(174, 521);
@@ -104,12 +104,12 @@ namespace ComfyViewer
 			this.BT_SIZER.Text = "fit";
 			this.BT_SIZER.UseVisualStyleBackColor = true;
 			this.BT_SIZER.Click += new System.EventHandler(this.BT_SIZER_Click);
-			// 
+			//
 			// PB_IMG
-			// 
-			this.PB_IMG.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			//
+			this.PB_IMG.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.PB_IMG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
 			this.PB_IMG.Location = new System.Drawing.Point(0, 0);
 			this.PB_IMG.Margin = new System.Windows.Forms.Padding(0);
@@ -118,9 +118,9 @@ namespace ComfyViewer
 			this.PB_IMG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.PB_IMG.TabIndex = 6;
 			this.PB_IMG.TabStop = false;
-			// 
+			//
 			// MainForm
-			// 
+			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(781, 608);
@@ -141,7 +141,6 @@ namespace ComfyViewer
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.PB_IMG)).EndInit();
 			this.ResumeLayout(false);
-
 		}
 	}
 
@@ -162,7 +161,6 @@ namespace ComfyViewer
 
 		public MainForm(string[] args)
 		{
-			//args = new string[] { @"C:\Users\akkir\Desktop\rgb.png" };
 			Task t = Task.Run(() =>
 			{
 				fileList = new List<string>();
@@ -264,7 +262,7 @@ namespace ComfyViewer
 				}
 			};
 
-			iconTimer.Interval = 250;
+			iconTimer.Interval = 2222;
 			iconTimer.Tick += (a, b) =>
 			{
 				DestroyIcon(this.Icon.Handle);
@@ -432,6 +430,7 @@ namespace ComfyViewer
 		}
 
 		private MemoryStream lastMemoryStream = null;
+
 		private Bitmap lastBm = null;
 		private System.Windows.Forms.Timer iconTimer = new System.Windows.Forms.Timer();
 
