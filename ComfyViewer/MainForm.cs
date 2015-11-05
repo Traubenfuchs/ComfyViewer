@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -154,6 +155,11 @@ namespace ComfyViewer
 		public double widthRatio = 0;
 		private List<Control> guiControls;
 
+		private MemoryStream lastMemoryStream = null;
+		private Bitmap lastBm = null;
+		private System.Windows.Forms.Timer iconTimer = new System.Windows.Forms.Timer();
+		private long errorCount = 0;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -164,7 +170,7 @@ namespace ComfyViewer
 			Task t = Task.Run(() =>
 			{
 				fileList = new List<string>();
-				Regex regex = new Regex(@"(jpg|png|gif|jpeg|bmp)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+				Regex regex = new Regex(@"(\.(jpg|png|gif|jpeg|bmp))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 				int i = 0;
 				foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.DirectorySeparatorChar))))
 				{
@@ -404,9 +410,15 @@ namespace ComfyViewer
 				try
 				{
 					LoadImage(fileList[filePosition]);
+					errorCount = 0;
 				}
 				catch (Exception ex) when (ex is OutOfMemoryException || ex is ArgumentException) // happens on Image.FromFile when used on certain invalid images
 				{
+					errorCount++;
+					if (errorCount > 100)
+					{
+						Process.GetCurrentProcess().Kill();
+					}
 					Go(next);
 				}
 			}
@@ -417,7 +429,9 @@ namespace ComfyViewer
 		private void GoLeft()
 		{
 			if (--filePosition < 0)
+			{
 				filePosition = fileList.Count - 1;
+			}
 
 			Go(GoLeft);
 		}
@@ -425,19 +439,18 @@ namespace ComfyViewer
 		private void GoRight()
 		{
 			if (++filePosition > fileList.Count - 1)
+			{
 				filePosition = 0;
+			}
 			Go(GoRight);
 		}
-
-		private MemoryStream lastMemoryStream = null;
-
-		private Bitmap lastBm = null;
-		private System.Windows.Forms.Timer iconTimer = new System.Windows.Forms.Timer();
 
 		private void LoadImage(string path)
 		{
 			if (lastMemoryStream != null)
+			{
 				lastMemoryStream.Close();
+			}
 			lastMemoryStream = new MemoryStream(File.ReadAllBytes(path));
 
 			var bm = (Bitmap)Bitmap.FromStream(lastMemoryStream);
