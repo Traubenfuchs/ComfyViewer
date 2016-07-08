@@ -17,5 +17,8 @@ namespace ComfyViewer
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
 		[return: System.Runtime.InteropServices.MarshalAs(UnmanagedType.Bool)]
 		public static extern bool SetWindowPos(System.IntPtr hWnd, System.IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
+
+		[System.Runtime.InteropServices.DllImport("user32")]
+		public static extern bool DestroyIcon(System.IntPtr hIcon);
 	}
 }

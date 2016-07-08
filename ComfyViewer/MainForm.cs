@@ -147,18 +147,36 @@ namespace ComfyViewer
 
 	public partial class MainForm : System.Windows.Forms.Form
 	{
+		// defines how far away from the windows borders the cursor changes to resize
 		public const int sizeCursorBoundry = 35;
-		public System.Collections.Generic.List<string> fileList;
-		public double heightRatio = 0;
-		public System.Windows.Forms.Timer invisTimer;
-		public int filePosition = 0;
-		public double widthRatio = 0;
-		private List<Control> guiControls;
 
-		private MemoryStream lastMemoryStream = null;
-		private Bitmap lastBm = null;
+		// list of files that can be displayed
+		public System.Collections.Generic.List<string> fileList = new List<string>();
+
+		// currently displayed file of the previous list, this is dumb and should be replaced with something smarter like a linked data structure I guess
+		public int filePosition = 0;
+
+		// when switching to an image it takes some time before ComfyViewer will create a thumbnail of the displayed image. This happens because thumbnail generation is very slow
 		private System.Windows.Forms.Timer iconTimer = new System.Windows.Forms.Timer();
+
+		// time before control elements become invisible after you move the cursor outside of the window
+		public System.Windows.Forms.Timer invisTimer = new System.Windows.Forms.Timer();
+
+		// GUI controls that can become invisible
+		private List<Control> guiControls = new List<Control>();
+
+		// used for creating a taskbar icon of the current image
+		private MemoryStream lastMemoryStream = null;
+
+		private Bitmap lastBm = null;
+
+		// When an image can't be displayed the next one will be display, if something goes horribly wrong and 100 images in a row can't be displayed the program will terminate
 		private long errorCount = 0;
+
+		// height and width ratio of the currently displayed image: relevant for forced aspect ratio resize
+		public double heightRatio = 0;
+
+		public double widthRatio = 0;
 
 		public MainForm()
 		{
@@ -169,23 +187,23 @@ namespace ComfyViewer
 		{
 			Task t = Task.Run(() =>
 			{
-				fileList = new List<string>();
 				Regex regex = new Regex(@"(\.(jpg|png|gif|jpeg|bmp))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 				int i = 0;
-				foreach (string filepath in System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.DirectorySeparatorChar))))
+				IEnumerable<string> filesInDirectory = System.IO.Directory.EnumerateFiles(args[0].Substring(0, args[0].LastIndexOf(Path.DirectorySeparatorChar)));
+				foreach (string filepath in filesInDirectory)
 				{
 					if (regex.IsMatch(filepath))
 					{
 						fileList.Add(filepath);
 						if (filepath == args[0])
+						{
 							filePosition = i;
+						}
 						i++;
 					}
 				}
 			});
 
-			invisTimer = new System.Windows.Forms.Timer();
-			guiControls = new List<Control>();
 			InitializeComponent();
 
 			guiControls.Add(BT_CLOSE);
@@ -211,7 +229,9 @@ namespace ComfyViewer
 			this.Move += (a, b) =>
 			{
 				if (this.Location.Y == 0)
+				{
 					this.Location = new Point(this.Location.X, lasty);
+				}
 
 				lasty = this.Location.Y;
 			};
@@ -219,9 +239,11 @@ namespace ComfyViewer
 			this.PB_IMG.MouseMove += MouseMoveEventToMakeAndKeepGuiControlsVisible;
 
 			foreach (Control c in guiControls)
+			{
 				c.MouseMove += MouseMoveEventToMakeAndKeepGuiControlsVisible;
+			}
 
-			// changes cursor to give visual feedback
+			// changes cursor to resize cursor give visual feedback
 			this.PB_IMG.MouseMove += (a, e) =>
 			{
 				System.Drawing.Point mousePosition = this.PointToClient(System.Windows.Forms.Cursor.Position);
@@ -268,26 +290,26 @@ namespace ComfyViewer
 				}
 			};
 
-			iconTimer.Interval = 2222;
 			iconTimer.Tick += (a, b) =>
 			{
-				DestroyIcon(this.Icon.Handle);
-				this.Icon = Icon.FromHandle(lastBm.GetHicon());
+				ExternalMethods.DestroyIcon(this.Icon.Handle);
+				IntPtr intPtr = lastBm.GetHicon();
+				this.Icon = Icon.FromHandle(intPtr);
 				iconTimer.Stop();
 			};
+			iconTimer.Interval = 2222;
 			iconTimer.Stop();
 			t.Wait();
-			LoadImage(args[0]);
+			LoadImageFromPath(args[0]);
 			this.PB_IMG.Focus();
 		}
-
-		[System.Runtime.InteropServices.DllImport("user32")]
-		public static extern bool DestroyIcon(IntPtr hIcon);
 
 		public void SetVisibilityOfGuiControls(bool x)
 		{
 			foreach (Control c in guiControls)
+			{
 				c.Visible = x;
+			}
 		}
 
 		// Go left and right via keyboard keys
@@ -373,17 +395,22 @@ namespace ComfyViewer
 
 		private void BT_DEL_Click(object sender, System.EventArgs e)
 		{
+			int lastPos = filePosition;
 			GoRight();
-			System.IO.File.Delete(fileList[filePosition]);
+			System.IO.File.Delete(fileList[lastPos]);
 		}
 
 		private void BT_KILLALL_Click(object sender, System.EventArgs e)
 		{
 			System.Diagnostics.Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
 
-			foreach (System.Diagnostics.Process process in System.Diagnostics.Process.GetProcessesByName("ComfyViewer"))
+			foreach (System.Diagnostics.Process process in System.Diagnostics.Process.GetProcessesByName(currentProcess.ProcessName))
+			{
 				if (currentProcess.Id != process.Id)
+				{
 					process.Kill();
+				}
+			}
 
 			currentProcess.Kill();
 		}
@@ -400,7 +427,7 @@ namespace ComfyViewer
 
 		private void BT_SIZER_Click(object sender, System.EventArgs e)
 		{
-			this.Size = new Size((int)PB_IMG.Image.Width, (int)PB_IMG.Image.Height);
+			this.Size = PB_IMG.Image.Size;
 		}
 
 		private void Go(Action next)
@@ -409,7 +436,7 @@ namespace ComfyViewer
 			{
 				try
 				{
-					LoadImage(fileList[filePosition]);
+					LoadImageFromPath(fileList[filePosition]);
 					errorCount = 0;
 				}
 				catch (Exception ex) when (ex is OutOfMemoryException || ex is ArgumentException) // happens on Image.FromFile when used on certain invalid images
@@ -419,11 +446,13 @@ namespace ComfyViewer
 					{
 						Process.GetCurrentProcess().Kill();
 					}
-					Go(next);
+					next();
 				}
 			}
 			else
-				Go(next);
+			{
+				next();
+			}
 		}
 
 		private void GoLeft()
@@ -445,15 +474,16 @@ namespace ComfyViewer
 			Go(GoRight);
 		}
 
-		private void LoadImage(string path)
+		private void LoadImageFromPath(string path)
 		{
 			if (lastMemoryStream != null)
 			{
 				lastMemoryStream.Close();
 			}
-			lastMemoryStream = new MemoryStream(File.ReadAllBytes(path));
+			byte[] fileBytes = File.ReadAllBytes(path);
+			lastMemoryStream = new MemoryStream(fileBytes);
 
-			var bm = (Bitmap)Bitmap.FromStream(lastMemoryStream);
+			Bitmap bm = (Bitmap)Bitmap.FromStream(lastMemoryStream);
 			PB_IMG.Image = bm;
 			lastBm = bm;
 			iconTimer.Stop();
@@ -462,7 +492,7 @@ namespace ComfyViewer
 			this.widthRatio = PB_IMG.Image.Width;
 			this.heightRatio = PB_IMG.Image.Height;
 			this.Text = fileList[filePosition];
-			if ((int)this.heightRatio > 1200)
+			if (this.heightRatio > 1200)
 			{
 				this.Height = 1200;
 				this.Width = (int)(1200 / (this.heightRatio / this.widthRatio));
